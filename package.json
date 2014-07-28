@@ -1,0 +1,49 @@
+{
+    "version": "0.1.0",
+    "name": "compositor",
+    "publishConfig": {
+        "proprietary-attribs": false
+    },
+    "description": "Compositor",
+    "keywords": [
+
+    ],
+    "config": {
+        "publishtest": false
+    },
+    "homepage": "http://compositor.io/",
+    "author": "Daniel Phillimore <dan@ovms.co> (http://ovms.co)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/asmblah/compositor"
+    },
+    "bugs": {
+        "email": "dan@ovms.co",
+        "url": "http://github.com/asmblah/compositor/issues"
+    },
+    "main": "index",
+    "scripts": {
+        "test": "node tests/bdd/index.js",
+        "webtest": "node tests/bdd/webtest.js"
+    },
+    "dependencies": {
+        "express": "3.2.x",
+        "modular-amd": "0.1.x",
+        "node-getopt": "0.2.x"
+    },
+    "devDependencies": {
+        "chai": "1.7.x",
+        "mocha": "1.12.x",
+        "sinon-chai": "2.4.x"
+    },
+    "engines": {
+        "node": ">=0.6",
+        "npm": "1"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/asmblah/compositor/raw/master/MIT-LICENSE.txt"
+        }
+    ]
+}

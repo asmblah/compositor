@@ -1,0 +1,22 @@
+Program: Student Targets
+========================
+
+When [the program] [starts], [show a list of subjects the student is taking].
+
+# Show a list of subjects the student is taking:
+Show the [subject list screen widget].
+For each [subject] in the [subject list]:
+    Add an [item] to the [subject list widget].
+    Display the [subject]'s name in the [item].
+    When the [item] is clicked, [show the targets for the subject].
+
+# Show the targets for the subject:
+Show the [subject screen widget].
+Show the [subject]'s name in the [subject name widget].
+Show the [subject]'s [current grade] in the [current grade widget].
+Show the [subject]'s [target grade] in the [target grade widget].
+Show the [subject]'s [action points] in the [action points widget].
+
+----
+
+See program.js
