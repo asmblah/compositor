@@ -58,8 +58,7 @@ define({
         mocha.suite.emit('pre-require', global, null, mocha);
 
         require([
-            'bdd/integration/editor/whenTest'
-            //'bdd/integration/programs/targetsTest'
+            'bdd/unit/js/ParserTest'
         ], function () {
             mocha.run(callback);
         });
