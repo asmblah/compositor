@@ -58,6 +58,7 @@ define({
         mocha.suite.emit('pre-require', global, null, mocha);
 
         require([
+            'bdd/unit/js/makePartialRegexTest',
             'bdd/unit/js/ParserTest'
         ], function () {
             mocha.run(callback);
