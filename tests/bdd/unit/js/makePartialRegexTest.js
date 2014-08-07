@@ -84,6 +84,15 @@ define([
                 pattern: /^here there$/,
                 string: 'here there everywhere',
                 expectedMatch: null
+            },
+            'when the pattern contains a character class': {
+                pattern: /hello [md]e/,
+                string: 'hello me',
+                expectedMatch: {
+                    0: 'hello me',
+                    input: 'hello me',
+                    index: 0
+                }
             }
         }, function (scenario, description) {
             describe(description, function () {

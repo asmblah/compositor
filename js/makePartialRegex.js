@@ -21,7 +21,7 @@ define(function () {
 
         for (index = position; index < source.length && !endPattern.test(source.substr(index)); index += token.length) {
             // Advance one token
-            match = source.substr(index).match(/^(\.\*?\??|\\[\s\S])/);
+            match = source.substr(index).match(/^(\\[\s\S]|\[[^\]]*\]|[\s\S])[.*?+]*/);
 
             if (match) {
                 token = match[0];
