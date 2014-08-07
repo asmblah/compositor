@@ -49,10 +49,10 @@ define([
                     }),
                     new Clause('When', [/^When (the) (.*?) is (.*?),\s*/, 'Verb', /\./], function (match) {
                         return {
-                            article: match.match[0][1],
-                            object: match.match[0][2],
-                            verb: match.match[0][3],
-                            consequence: match.match[1]
+                            article: match.match[0][1] || null,
+                            object: match.match[0][2] || null,
+                            verb: match.match[0][3] || null,
+                            consequence: match.match[1] || null
                         };
                     })
                 ]);
@@ -64,14 +64,14 @@ define([
             util.each({
                 'when the input is an empty program': {
                     code: '',
-                    expectedAST: {
+                    expectedASTs: [{
                         type: 'ProgramClause',
                         body: []
-                    }
+                    }]
                 },
                 'when the input is a single clause': {
                     code: 'Open the door',
-                    expectedAST: {
+                    expectedASTs: [{
                         type: 'ProgramClause',
                         body: [{
                             type: 'VerbClause',
@@ -79,11 +79,11 @@ define([
                             article: 'the',
                             object: 'door'
                         }]
-                    }
+                    }]
                 },
                 'when the input has a nested clause': {
                     code: 'When the Z button is clicked, open the magical seal.',
-                    expectedAST: {
+                    expectedASTs: [{
                         type: 'ProgramClause',
                         body: [{
                             type: 'WhenClause',
@@ -97,12 +97,25 @@ define([
                                 object: 'magical seal'
                             }
                         }]
-                    }
+                    }]
+                },
+                'when the input partially matches one clause': {
+                    code: 'When ',
+                    expectedASTs: [{
+                        type: 'ProgramClause',
+                        body: [{
+                            type: 'WhenClause',
+                            article: null,
+                            object: null,
+                            verb: null,
+                            consequence: null
+                        }]
+                    }]
                 }
             }, function (scenario, description) {
                 describe(description, function () {
-                    it('should return the expected AST', function () {
-                        expect(parser.parse(scenario.code)).to.deep.equal(scenario.expectedAST);
+                    it('should return the expected ASTs', function () {
+                        expect(parser.parse(scenario.code)).to.deep.equal(scenario.expectedASTs);
                     });
                 });
             });

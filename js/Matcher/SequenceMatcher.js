@@ -41,7 +41,6 @@ define([
                 var match = subMatcher.match(text, offset);
 
                 if (!match) {
-                    matches = null;
                     return false;
                 }
 
@@ -51,7 +50,7 @@ define([
                 length += match.length;
             });
 
-            if (!matches) {
+            if (matches.length === 0) {
                 return null;
             }
 

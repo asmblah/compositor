@@ -8,8 +8,10 @@
 
 /*global define */
 define([
+    'js/makePartialRegex',
     'js/util'
 ], function (
+    makePartialRegex,
     util
 ) {
     'use strict';
@@ -33,7 +35,7 @@ define([
             }
 
             if (matcher instanceof RegExp) {
-                return new RegExpMatcher(matcher);
+                return new RegExpMatcher(makePartialRegex(matcher));
             }
 
             if (util.isString(matcher)) {
