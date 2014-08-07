@@ -18,26 +18,13 @@ define(function () {
             result = '',
             closing = '',
             pattern = '',
-            token,
-            tokenLength;
+            token;
 
-        for (index = position; index < source.length && !endPattern.test(source.substr(index)); index += tokenLength) {
-            // Advance one token
-            match = source.substr(index).match(/^(\\[\s\S]|\[[^\]]*\]|[\s\S])[.*?+]*/);
+        for (index = position; index < source.length && !endPattern.test(source.substr(index)); index += token.length) {
+            // Read one token
+            match = source.substr(index).match(/^(\\[\s\S]|\[[^\]]*\]|[\s\S])[*?+]*/);
 
-            if (match) {
-                token = match[0];
-                tokenLength = token.length;
-
-                // Making everything optional makes everything lazy,
-                // so make sure any lazy quantifiers are removed
-                if (/[*+]\?$/.test(token)) {
-                    token = token.substr(0, token.length - 1);
-                }
-            } else {
-                token = source.charAt(index);
-                tokenLength = token.length;
-            }
+            token = match[0];
 
             if (token === '(') {
                 result = processGroup(source, index + 1);
@@ -48,7 +35,7 @@ define(function () {
                     pattern += token;
                 } else {
                     pattern += '(?:' + token;
-                    closing += ')?';
+                    closing += '|$)';
                 }
             }
         }

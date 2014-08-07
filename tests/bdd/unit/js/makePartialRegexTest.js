@@ -81,21 +81,26 @@ define([
                     index: 0
                 }
             },
-            'when the pattern is not anchored to start of string so could match further along, but a partial match is possible': {
+            'when the pattern is not anchored to start of string, a partial match is possible but a full match is further along': {
                 pattern: /first$/,
                 string: 'first then second then first',
                 expectedMatch: {
                     0: 'first',
                     input: 'first then second then first',
-                    index: 0
+                    index: 23
                 }
             },
-            'when the pattern should fail to match because it expects the end of the string, but a partial match is possible': {
+            'when the pattern is not anchored to start of string but cannot match further along, and a partial match is not possible': {
+                pattern: /first$/,
+                string: 'first then second then third',
+                expectedMatch: null
+            },
+            'when the anchored pattern should fail to match because it expects the end of the string, but a partial match is possible': {
                 pattern: /^here there$/,
-                string: 'here there everywhere',
+                string: 'here the',
                 expectedMatch: {
-                    0: 'here there',
-                    input: 'here there everywhere',
+                    0: 'here the',
+                    input: 'here the',
                     index: 0
                 }
             },
@@ -123,6 +128,16 @@ define([
                 expectedMatch: {
                     0: 'welcome to here',
                     input: 'welcome to here, you',
+                    index: 0
+                }
+            },
+            'when the pattern contains an ungreedy capturing group followed by text': {
+                pattern: /welcome to (.*?) near you/,
+                string: 'welcome to somewhere near you',
+                expectedMatch: {
+                    0: 'welcome to somewhere near you',
+                    1: 'somewhere',
+                    input: 'welcome to somewhere near you',
                     index: 0
                 }
             }
