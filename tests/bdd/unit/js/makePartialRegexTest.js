@@ -41,6 +41,16 @@ define([
                 string: 'jax',
                 expectedMatch: null
             },
+            'when the pattern is anchored to start of string and is not partially matched': {
+                pattern: /^hello world/,
+                string: 'jax',
+                expectedMatch: null
+            },
+            'when the pattern is anchored to start of string, immediately followed by a capturing group, and is not partially matched': {
+                pattern: /^(hello) world/,
+                string: 'jax',
+                expectedMatch: null
+            },
             'when the pattern has one literal capturing group and is only partially matched outside that group': {
                 pattern: /welcome (to) the jungle/,
                 string: 'welcome',
@@ -71,19 +81,23 @@ define([
                     index: 0
                 }
             },
-            'when the pattern is not anchored to start of string so should match further along': {
+            'when the pattern is not anchored to start of string so could match further along, but a partial match is possible': {
                 pattern: /first$/,
                 string: 'first then second then first',
                 expectedMatch: {
                     0: 'first',
                     input: 'first then second then first',
-                    index: 23
+                    index: 0
                 }
             },
-            'when the pattern should fail to match because it expects the end of the string': {
+            'when the pattern should fail to match because it expects the end of the string, but a partial match is possible': {
                 pattern: /^here there$/,
                 string: 'here there everywhere',
-                expectedMatch: null
+                expectedMatch: {
+                    0: 'here there',
+                    input: 'here there everywhere',
+                    index: 0
+                }
             },
             'when the pattern contains a character class': {
                 pattern: /hello [md]e/,
@@ -91,6 +105,24 @@ define([
                 expectedMatch: {
                     0: 'hello me',
                     input: 'hello me',
+                    index: 0
+                }
+            },
+            'when the pattern ends with a greedy quantifier': {
+                pattern: /hello .*/,
+                string: 'hello you and also you',
+                expectedMatch: {
+                    0: 'hello you and also you',
+                    input: 'hello you and also you',
+                    index: 0
+                }
+            },
+            'when the pattern is not anchored to the end of the string and does not match it fully': {
+                pattern: /welcome to here/,
+                string: 'welcome to here, you',
+                expectedMatch: {
+                    0: 'welcome to here',
+                    input: 'welcome to here, you',
                     index: 0
                 }
             }
