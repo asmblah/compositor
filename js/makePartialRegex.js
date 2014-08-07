@@ -30,6 +30,9 @@ define(function () {
                 result = processGroup(source, index + 1);
                 pattern += '(' + result.pattern + ')';
                 index = result.nextPosition;
+            } else if (token === '|') {
+                pattern += closing + token;
+                closing = '';
             } else {
                 if (index <= firstNonZeroWidthTokenIndex) {
                     pattern += token;

@@ -140,6 +140,16 @@ define([
                     input: 'welcome to somewhere near you',
                     index: 0
                 }
+            },
+            'when the pattern uses alternation inside a capturing group': {
+                pattern: /welcome to (it|that), you/,
+                string: 'welcome to that, you',
+                expectedMatch: {
+                    0: 'welcome to that, you',
+                    1: 'that',
+                    input: 'welcome to that, you',
+                    index: 0
+                }
             }
         }, function (scenario, description) {
             describe(description, function () {
