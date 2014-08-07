@@ -49,7 +49,10 @@ define([
                 throw new Error('Invalid syntax near "' + text.substr(match.length, 10) + '"');
             }
 
-            return [match.match];
+            return {
+                ast: match.match,
+                length: match.length
+            };
         }
     });
 

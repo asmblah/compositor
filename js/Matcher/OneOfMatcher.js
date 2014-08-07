@@ -32,23 +32,25 @@ define([
 
     util.extend(OneOfMatcher.prototype, {
         match: function (text, offset) {
-            var match = null;
+            var matches = [],
+                lengths = [];
 
             util.each(this.subMatchers, function (subMatcher) {
-                match = subMatcher.match(text, offset);
+                var match = subMatcher.match(text, offset);
 
                 if (match) {
-                    return false;
+                    matches.push(match.match);
+                    lengths.push(match.length);
                 }
             });
 
-            if (!match) {
+            if (matches.length === 0) {
                 return null;
             }
 
             return {
-                match: match,
-                length: match.length
+                match: matches,
+                length: Math.max.apply(null, lengths)
             };
         },
 

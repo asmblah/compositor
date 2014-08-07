@@ -26,18 +26,18 @@ define([
         beforeEach(function () {
             var clauseRepository = new ClauseRepository([
                     new Clause('Program', [
-                        new Parser.Multiple(new Parser.OneOf(['Verb', 'When']))
+                        new Parser.Multiple([new Parser.OneOf(['Verb', 'When', 'Where']), /\.\s*/])
                     ], function (match) {
-                        var nodes = [];
+                        var body = [];
 
                         if (match.length > 0) {
-                            util.each(match.match, function (subMatch) {
-                                nodes.push(subMatch[0].match);
+                            util.each(match.match[0], function (match) {
+                                body.push(match[0]);
                             });
                         }
 
                         return {
-                            body: nodes
+                            body: body
                         };
                     }),
                     new Clause('Verb', [/^([Oo]pen) (the) (door|magical seal)/], function (match) {
@@ -47,12 +47,17 @@ define([
                             verb: match.match[0][1]
                         };
                     }),
-                    new Clause('When', [/^When (the) (.*?) is (.*?),\s*/, 'Verb', /\./], function (match) {
+                    new Clause('When', [/^When (the) (.*?) is (.*?),\s*/, 'Verb'], function (match) {
                         return {
                             article: match.match[0][1] || null,
                             object: match.match[0][2] || null,
                             verb: match.match[0][3] || null,
                             consequence: match.match[1] || null
+                        };
+                    }),
+                    new Clause('Where', [/^Where is (.*?)/], function (match) {
+                        return {
+                            object: match.match[0][1] || null
                         };
                     })
                 ]);
@@ -64,58 +69,116 @@ define([
             util.each({
                 'when the input is an empty program': {
                     code: '',
-                    expectedASTs: [{
+                    expectedAST: {
                         type: 'ProgramClause',
                         body: []
-                    }]
+                    },
+                    expectedLength: 0
                 },
                 'when the input is a single clause': {
                     code: 'Open the door',
-                    expectedASTs: [{
+                    expectedAST: {
                         type: 'ProgramClause',
-                        body: [{
-                            type: 'VerbClause',
-                            verb: 'Open',
-                            article: 'the',
-                            object: 'door'
-                        }]
-                    }]
+                        body: [
+                            [{
+                                type: 'VerbClause',
+                                verb: 'Open',
+                                article: 'the',
+                                object: 'door'
+                            }]
+                        ]
+                    },
+                    expectedLength: 13
                 },
                 'when the input has a nested clause': {
                     code: 'When the Z button is clicked, open the magical seal.',
-                    expectedASTs: [{
+                    expectedAST: {
                         type: 'ProgramClause',
-                        body: [{
-                            type: 'WhenClause',
-                            article: 'the',
-                            object: 'Z button',
-                            verb: 'clicked',
-                            consequence: {
-                                type: 'VerbClause',
-                                verb: 'open',
+                        body: [
+                            [{
+                                type: 'WhenClause',
                                 article: 'the',
-                                object: 'magical seal'
-                            }
-                        }]
-                    }]
+                                object: 'Z button',
+                                verb: 'clicked',
+                                consequence: {
+                                    type: 'VerbClause',
+                                    verb: 'open',
+                                    article: 'the',
+                                    object: 'magical seal'
+                                }
+                            }]
+                        ]
+                    },
+                    expectedLength: 52
                 },
                 'when the input partially matches one clause': {
                     code: 'When ',
-                    expectedASTs: [{
+                    expectedAST: {
                         type: 'ProgramClause',
-                        body: [{
-                            type: 'WhenClause',
-                            article: null,
-                            object: null,
-                            verb: null,
-                            consequence: null
-                        }]
-                    }]
+                        body: [
+                            [{
+                                type: 'WhenClause',
+                                article: null,
+                                object: null,
+                                verb: null,
+                                consequence: null
+                            }]
+                        ]
+                    },
+                    expectedLength: 5
+                },
+                'when the input partially matches multiple clauses': {
+                    code: 'Whe',
+                    expectedAST: {
+                        type: 'ProgramClause',
+                        body: [
+                            [{
+                                type: 'WhenClause',
+                                article: null,
+                                object: null,
+                                verb: null,
+                                consequence: null
+                            }, {
+                                type: 'WhereClause',
+                                object: null
+                            }]
+                        ]
+                    },
+                    expectedLength: 3
+                },
+                'when the input fully matches one clause, then next partially matches multiple clauses': {
+                    code: 'Open the door. Whe',
+                    expectedAST: {
+                        type: 'ProgramClause',
+                        body: [
+                            [{
+                                type: 'VerbClause',
+                                verb: 'Open',
+                                article: 'the',
+                                object: 'door'
+                            }],
+                            [{
+                                type: 'WhenClause',
+                                article: null,
+                                object: null,
+                                verb: null,
+                                consequence: null
+                            }, {
+                                type: 'WhereClause',
+                                object: null
+                            }]
+                        ]
+                    },
+                    expectedLength: 18
                 }
             }, function (scenario, description) {
                 describe(description, function () {
-                    it('should return the expected ASTs', function () {
-                        expect(parser.parse(scenario.code)).to.deep.equal(scenario.expectedASTs);
+                    it('should return the expected AST', function () {
+                        expect(parser.parse(scenario.code).ast).to.deep.equal(scenario.expectedAST);
+                    });
+
+                    it('should return a match of the correct length', function () {
+                        expect(parser.parse(scenario.code).length).to.equal(scenario.expectedLength);
                     });
                 });
             });
