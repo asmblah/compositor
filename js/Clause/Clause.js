@@ -50,7 +50,9 @@ define([
                 return match;
             }
 
-            node = clause.processor(match);
+            node = util.isArray(match.match) ?
+                clause.processor.apply(null, match.match) :
+                clause.processor(match.match);
 
             node.type = clause.name + 'Clause';
 

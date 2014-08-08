@@ -31,7 +31,7 @@ define([
                         var body = [];
 
                         if (match.length > 0) {
-                            util.each(match.match[0], function (match) {
+                            util.each(match, function (match) {
                                 body.push(match[0]);
                             });
                         }
@@ -42,22 +42,22 @@ define([
                     }),
                     new Clause('Verb', [/^([Oo]pen) (the) (door|magical seal)/], function (match) {
                         return {
-                            article: match.match[0][2],
-                            object: match.match[0][3],
-                            verb: match.match[0][1]
+                            article: match[2],
+                            object: match[3],
+                            verb: match[1]
                         };
                     }),
-                    new Clause('When', [/^When (the) (.*?) is (.*?),\s*/, 'Verb'], function (match) {
+                    new Clause('When', [/^When (the) (.*?) is (.*?),\s*/, 'Verb'], function (match, consequence) {
                         return {
-                            article: match.match[0][1] || null,
-                            object: match.match[0][2] || null,
-                            verb: match.match[0][3] || null,
-                            consequence: match.match[1] || null
+                            article: match[1] || null,
+                            object: match[2] || null,
+                            verb: match[3] || null,
+                            consequence: consequence || null
                         };
                     }),
                     new Clause('Where', [/^Where is (.*?)/], function (match) {
                         return {
-                            object: match.match[0][1] || null
+                            object: match[1] || null
                         };
                     })
                 ]);
