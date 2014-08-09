@@ -16,17 +16,25 @@ define([
 ) {
     'use strict';
 
+    var matcherGroup;
+
     function OneOfMatcher(matchers) {
         var subMatchers = [];
 
         Matcher.call(this);
 
         util.each(matchers, function (subMatcher) {
-            subMatchers.push(Matcher.from(subMatcher));
+            subMatchers.push(matcherGroup.from(subMatcher));
         });
 
         this.subMatchers = subMatchers;
     }
+
+    util.extend(OneOfMatcher, {
+        setMatcherGroup: function (matchers) {
+            matcherGroup = matchers;
+        }
+    });
 
     util.inherit(OneOfMatcher).from(Matcher);
 

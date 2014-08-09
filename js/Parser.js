@@ -8,21 +8,9 @@
 
 /*global define */
 define([
-    'js/util',
-    './Matcher/Matcher',
-    'js/Matcher/MultipleMatcher',
-    'js/Matcher/OneOfMatcher',
-    'js/Matcher/ReferenceMatcher',
-    'js/Matcher/RegExpMatcher',
-    'js/Matcher/SequenceMatcher'
+    'js/util'
 ], function (
-    util,
-    Matcher,
-    MultipleMatcher,
-    OneOfMatcher,
-    ReferenceMatcher,
-    RegExpMatcher,
-    SequenceMatcher
+    util
 ) {
     'use strict';
 
@@ -30,14 +18,6 @@ define([
         this.repository = repository;
         this.entryItemName = entryItemName;
     }
-
-    util.extend(Parser, {
-        Multiple: MultipleMatcher,
-        OneOf: OneOfMatcher,
-        Reference: ReferenceMatcher,
-        RegExp: RegExpMatcher,
-        Sequence: SequenceMatcher
-    });
 
     util.extend(Parser.prototype, {
         parse: function (text) {
@@ -55,8 +35,6 @@ define([
             };
         }
     });
-
-    Matcher.setSubClasses(Parser);
 
     return Parser;
 });

@@ -8,13 +8,13 @@
 
 /*global define */
 define([
+    'js/Matcher/matchers',
     'js/util',
-    'js/Component',
-    'js/Matcher/Matcher'
+    'js/Component'
 ], function (
+    matchers,
     util,
-    Component,
-    Matcher
+    Component
 ) {
     'use strict';
 
@@ -22,7 +22,7 @@ define([
         Component.call(this, options);
 
         this.name = name;
-        this.matcher = Matcher.from(matcher);
+        this.matcher = matchers.from(matcher);
         this.processor = processor;
     }
 

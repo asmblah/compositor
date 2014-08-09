@@ -16,11 +16,19 @@ define([
 ) {
     'use strict';
 
+    var matcherGroup;
+
     function MultipleMatcher(matcher) {
         Matcher.call(this);
 
-        this.matcher = Matcher.from(matcher);
+        this.matcher = matcherGroup.from(matcher);
     }
+
+    util.extend(MultipleMatcher, {
+        setMatcherGroup: function (matchers) {
+            matcherGroup = matchers;
+        }
+    });
 
     util.inherit(MultipleMatcher).from(Matcher);
 

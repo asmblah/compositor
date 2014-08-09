@@ -8,11 +8,13 @@
 
 /*global define */
 define([
+    'js/Matcher/matchers',
     'js/util',
     'js/Clause/Clause',
     'js/Repository/ClauseRepository',
     'js/Parser'
 ], function (
+    matchers,
     util,
     Clause,
     ClauseRepository,
@@ -26,7 +28,7 @@ define([
         beforeEach(function () {
             var clauseRepository = new ClauseRepository([
                     new Clause('Program', [
-                        new Parser.Multiple([new Parser.OneOf(['Verb', 'When', 'Where']), /\.\s*/])
+                        new matchers.Multiple([new matchers.OneOf(['Verb', 'When', 'Where']), /\.\s*/])
                     ], function (match) {
                         var body = [];
 
