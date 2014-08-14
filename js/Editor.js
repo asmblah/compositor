@@ -41,7 +41,10 @@ define([
                 addContextMenuItem: function (item) {
                     editor.contextMenu.addItem(item);
                 },
-                program: editor.program
+                program: editor.program,
+                setContextMenuTextPosition: function (textPosition) {
+                    editor.contextMenu.setTextPosition(textPosition);
+                }
             });
 
             if (editor.contextMenu.getItems().length > 0) {

@@ -16,6 +16,7 @@ define([
 
     function ContextMenu() {
         this.items = [];
+        this.textPosition = 0;
         this.visible = false;
     }
 
@@ -28,12 +29,20 @@ define([
             return this.items.slice();
         },
 
+        getTextPosition: function () {
+            return this.textPosition;
+        },
+
         hide: function () {
             this.visible = false;
         },
 
         isVisible: function () {
             return this.visible;
+        },
+
+        setTextPosition: function (textPosition) {
+            this.textPosition = textPosition;
         },
 
         show: function () {

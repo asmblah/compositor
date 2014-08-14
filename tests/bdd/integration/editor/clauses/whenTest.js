@@ -59,6 +59,7 @@ define([
                 },
                 typedText: 'When ',
                 expectContextMenu: true,
+                expectedContextMenuTextPosition: 5,
                 expectedContextMenuItems: [
                     {type: 'program'}
                 ],
@@ -75,6 +76,7 @@ define([
                 },
                 typedText: 'When ',
                 expectContextMenu: true,
+                expectedContextMenuTextPosition: 5,
                 expectedContextMenuItems: [
                     {type: 'program'},
                     {type: 'widget', id: 'button1'},
@@ -92,6 +94,7 @@ define([
                 },
                 typedText: 'When my_button ',
                 expectContextMenu: true,
+                expectedContextMenuTextPosition: 15,
                 expectedContextMenuItems: [
                     {type: 'event', widgetID: 'my_button', name: 'click'}
                 ],
@@ -121,6 +124,12 @@ define([
                     } else {
                         it('should not display the context menu', function () {
                             expect(contextMenu.isVisible()).to.be.false;
+                        });
+                    }
+
+                    if (scenario.hasOwnProperty('expectedContextMenuTextPosition')) {
+                        it('should display the context menu at the correct text position', function () {
+                            expect(contextMenu.getTextPosition()).to.equal(scenario.expectedContextMenuTextPosition);
                         });
                     }
 
