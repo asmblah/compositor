@@ -11,17 +11,21 @@ define([
     'js/util',
     'js/Display',
     'js/Editor',
-    'js/Program'
+    'js/Program',
+    'js/Walker'
 ], function (
     util,
     Display,
     Editor,
-    Program
+    Program,
+    Walker
 ) {
     'use strict';
 
-    function Compositor() {
-
+    function Compositor(clauseRepository, widgetRepository, parser) {
+        this.clauseRepository = clauseRepository;
+        this.parser = parser;
+        this.widgetRepository = widgetRepository;
     }
 
     util.extend(Compositor.prototype, {
@@ -30,11 +34,23 @@ define([
         },
 
         createEditor: function (options) {
-            return new Editor(options);
+            var compositor = this;
+
+            return new Editor(
+                compositor.parser,
+                new Walker(compositor.clauseRepository),
+                options
+            );
         },
 
         createProgram: function (options) {
-            return new Program(options);
+            var compositor = this;
+
+            return new Program(
+                compositor.clauseRepository,
+                compositor.widgetRepository,
+                options
+            );
         }
     });
 

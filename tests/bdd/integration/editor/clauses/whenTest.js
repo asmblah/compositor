@@ -8,17 +8,27 @@
 
 /*global define */
 define([
+    'components/clauses/index',
     'js/util',
+    'components/widgets/index',
+    'js/Repository/ClauseRepository',
     'js/Compositor',
-    'js/Widget'
+    'js/Parser',
+    'js/Widget',
+    'js/Repository/WidgetRepository'
 ], function (
+    clauses,
     util,
+    widgets,
+    ClauseRepository,
     Compositor,
-    Widget
+    Parser,
+    Widget,
+    WidgetRepository
 ) {
     'use strict';
 
-    describe('Editor "When" action integration test', function () {
+    describe('Editor "When" clause integration test', function () {
         var compositor,
             contextMenu,
             display,
@@ -26,7 +36,11 @@ define([
             program;
 
         beforeEach(function () {
-            compositor = new Compositor();
+            var clauseRepository = new ClauseRepository(clauses),
+                parser = new Parser(clauseRepository, 'Program'),
+                widgetRepository = new WidgetRepository(widgets);
+
+            compositor = new Compositor(clauseRepository, widgetRepository, parser);
 
             program = compositor.createProgram();
             editor = compositor.createEditor();
@@ -52,8 +66,8 @@ define([
             'when the program has two widgets and the developer types "When" followed by a space': {
                 initialComponents: {
                     widgets: {
-                        'button1': {},
-                        'button2': {}
+                        'button1': {extends: 'button'},
+                        'button2': {extends: 'button'}
                     }
                 },
                 typedText: 'When ',
@@ -62,6 +76,18 @@ define([
                     {type: 'program'},
                     {type: 'widget', id: 'button1'},
                     {type: 'widget', id: 'button2'}
+                ]
+            },
+            'when the developer views a list of available events of a widget by typing "When " then selecting the widget and typing a space': {
+                initialComponents: {
+                    widgets: {
+                        'my_button': {extends: 'button'}
+                    }
+                },
+                typedText: 'When my_button ',
+                expectContextMenu: true,
+                expectedContextMenuItems: [
+                    {type: 'event', widgetID: 'my_button', name: 'click'}
                 ]
             }
         }, function (scenario, description) {
@@ -86,6 +112,12 @@ define([
                             if (attributes.type === 'program') {
                                 it('should show a context menu item that represents the running program', function () {
                                     expect(contextMenu.showsComponent(program)).to.be.true;
+                                });
+                            } else if (attributes.type === 'event') {
+                                it('should show a context menu item that represents event "' + attributes.name + '"', function () {
+                                    var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
+
+                                    expect(contextMenu.showsComponent(event)).to.be.true;
                                 });
                             } else {
                                 it('should show a context menu item that represents widget "' + attributes.id + '"', function () {

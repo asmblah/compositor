@@ -16,10 +16,12 @@ define([
 ) {
     'use strict';
 
-    function Editor(options) {
+    function Editor(parser, walker, options) {
         this.contextMenu = new ContextMenu();
         this.options = options;
+        this.parser = parser;
         this.program = null;
+        this.walker = walker;
     }
 
     util.extend(Editor.prototype, {
@@ -28,15 +30,23 @@ define([
         },
 
         insert: function (text) {
-            var editor = this;
+            var editor = this,
+                context = {
+                    contextMenu: editor.contextMenu,
+                    program: editor.program
+                },
+                ast = editor.parser.parse(text, context, {'captureLocation': true}).ast;
 
-            editor.contextMenu.addItem(editor.program);
-
-            util.each(editor.program.getWidgets(), function (widget) {
-                editor.contextMenu.addItem(widget);
+            editor.walker.walk(ast, {
+                addContextMenuItem: function (item) {
+                    editor.contextMenu.addItem(item);
+                },
+                program: editor.program
             });
 
-            editor.contextMenu.show();
+            if (editor.contextMenu.getItems().length > 0) {
+                editor.contextMenu.show();
+            }
         },
 
         load: function (program) {

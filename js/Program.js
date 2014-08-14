@@ -10,34 +10,42 @@
 define([
     'js/util',
     'js/Promise',
-    'js/Widget'
+    'js/Repository/WidgetRepository'
 ], function (
     util,
     Promise,
-    Widget
+    WidgetRepository
 ) {
     'use strict';
 
-    function Program(options) {
+    var EXTENDS = 'extends';
+
+    function Program(clauseRepository, widgetRepository, options) {
+        this.clauseRepository = clauseRepository;
         this.options = options;
-        this.widgets = {};
+        this.parentWidgetRepository = widgetRepository;
+        this.widgetRepository = new WidgetRepository();
     }
 
     util.extend(Program.prototype, {
         getWidgetByID: function (id) {
-            return this.widgets[id] || null;
+            var program = this;
+
+            return program.widgetRepository.getWidgetByID(id) || program.parentWidgetRepository.getWidgetByID(id) || null;
         },
 
         getWidgets: function () {
-            return this.widgets;
+            return this.widgetRepository.getWidgets();
         },
 
         load: function (components) {
             var program = this,
                 promise = new Promise();
 
-            util.each(components.widgets, function (widgetData, id) {
-                program.widgets[id] = new Widget();
+            util.each(components.widgets, function (attributes, id) {
+                var parentWidget = program.getWidgetByID(attributes[EXTENDS]);
+
+                program.widgetRepository.add(parentWidget.extend(id, attributes));
             });
 
             promise.resolve();

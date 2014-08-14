@@ -39,6 +39,7 @@
     mapPaths({
         '/acceptance': bddPath + '/acceptance/',
         '/chai': nodeModulesPath + '/chai/',
+        '/components': rootPath + '/components/',
         '/index.html': bddPath + '/index.html',
         '/integration': bddPath + '/integration/',
         '/js': rootPath + '/js/',

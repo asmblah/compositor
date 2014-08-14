@@ -15,11 +15,22 @@ define([
     'use strict';
 
     function Component(options) {
-        this.options = options;
+        this.events = {};
+        this.options = options || {};
     }
 
     util.extend(Component.prototype, {
+        addEvent: function (event) {
+            this.events[event.getName()] = event;
+        },
 
+        getEventByName: function (name) {
+            return this.events[name];
+        },
+
+        getEvents: function () {
+            return this.events;
+        }
     });
 
     return Component;

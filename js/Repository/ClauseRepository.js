@@ -20,6 +20,7 @@ define([
 
     function ClauseRepository(clauses) {
         this.clauses = {};
+        this.suffix = 'Clause';
 
         this.addMultiple(clauses);
     }
@@ -45,14 +46,21 @@ define([
             });
         },
 
-        getAll: function () {
-            return this.clauses;
-        },
-
         getByName: function (name) {
             var repository = this;
 
             return hasOwn.call(repository.clauses, name) ? repository.clauses[name] : null;
+        },
+
+        getByQualifiedName: function (name) {
+            var repository = this,
+                suffix = repository.suffix;
+
+            if (name.substr(name.length - suffix.length) !== suffix) {
+                throw new Error('ClauseRepository.getByQualifiedName() :: Unrecognised suffix');
+            }
+
+            return repository.getByName(name.substr(0, name.length - suffix.length));
         }
     });
 

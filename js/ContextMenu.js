@@ -24,6 +24,10 @@ define([
             this.items.push(item);
         },
 
+        getItems: function () {
+            return this.items.slice();
+        },
+
         hide: function () {
             this.visible = false;
         },

@@ -11,6 +11,7 @@ define({
     cache: false,
     paths: {
         'bdd': '.',
+        'components': '/../../components',
         'js': '/../../js',
         'languages': '/../../languages',
 
@@ -58,6 +59,7 @@ define({
         mocha.suite.emit('pre-require', global, null, mocha);
 
         require([
+            'bdd/integration/editor/clauses/whenTest',
             'bdd/unit/js/makePartialRegexTest',
             'bdd/unit/js/ParserTest'
         ], function () {

@@ -18,12 +18,13 @@ define([
 ) {
     'use strict';
 
-    function Clause(name, matcher, processor, options) {
+    function Clause(name, matcher, processor, walker, options) {
         Component.call(this, options);
 
         this.name = name;
         this.matcher = matchers.from(matcher);
         this.processor = processor;
+        this.walker = walker;
     }
 
     util.inherit(Clause).from(Component);
@@ -67,6 +68,14 @@ define([
                 match: node,
                 length: match.length
             };
+        },
+
+        walk: function (node, walkSubNode, context) {
+            var clause = this;
+
+            if (clause.walker) {
+                clause.walker.call(context, node, walkSubNode);
+            }
         }
     });
 
