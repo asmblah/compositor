@@ -61,6 +61,9 @@ define([
                 expectContextMenu: true,
                 expectedContextMenuItems: [
                     {type: 'program'}
+                ],
+                unexpectedContextMenuItems: [
+                    {type: 'invalid_widget'}
                 ]
             },
             'when the program has two widgets and the developer types "When" followed by a space': {
@@ -76,6 +79,9 @@ define([
                     {type: 'program'},
                     {type: 'widget', id: 'button1'},
                     {type: 'widget', id: 'button2'}
+                ],
+                unexpectedContextMenuItems: [
+                    {type: 'invalid_widget'}
                 ]
             },
             'when the developer views a list of available events of a widget by typing "When " then selecting the widget and typing a space': {
@@ -88,6 +94,11 @@ define([
                 expectContextMenu: true,
                 expectedContextMenuItems: [
                     {type: 'event', widgetID: 'my_button', name: 'click'}
+                ],
+                unexpectedContextMenuItems: [
+                    {type: 'program'},
+                    {type: 'widget', id: 'button1'},
+                    {type: 'invalid_widget'}
                 ]
             }
         }, function (scenario, description) {
@@ -107,35 +118,55 @@ define([
                         it('should display the context menu', function () {
                             expect(contextMenu.isVisible()).to.be.true;
                         });
-
-                        util.each(scenario.expectedContextMenuItems, function (attributes) {
-                            if (attributes.type === 'program') {
-                                it('should show a context menu item that represents the running program', function () {
-                                    expect(contextMenu.showsComponent(program)).to.be.true;
-                                });
-                            } else if (attributes.type === 'event') {
-                                it('should show a context menu item that represents event "' + attributes.name + '"', function () {
-                                    var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
-
-                                    expect(contextMenu.showsComponent(event)).to.be.true;
-                                });
-                            } else {
-                                it('should show a context menu item that represents widget "' + attributes.id + '"', function () {
-                                    var widget = program.getWidgetByID(attributes.id);
-
-                                    expect(contextMenu.showsComponent(widget)).to.be.true;
-                                });
-                            }
-                        });
-
-                        it('should not show a context menu item that represents an invalid widget', function () {
-                            expect(contextMenu.showsComponent(new Widget())).to.be.false;
-                        });
                     } else {
                         it('should not display the context menu', function () {
                             expect(contextMenu.isVisible()).to.be.false;
                         });
                     }
+
+                    util.each(scenario.expectedContextMenuItems, function (attributes) {
+                        if (attributes.type === 'program') {
+                            it('should show a context menu item that represents the running program', function () {
+                                expect(contextMenu.showsComponent(program)).to.be.true;
+                            });
+                        } else if (attributes.type === 'event') {
+                            it('should show a context menu item that represents event "' + attributes.name + '"', function () {
+                                var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
+
+                                expect(contextMenu.showsComponent(event)).to.be.true;
+                            });
+                        } else {
+                            it('should show a context menu item that represents widget "' + attributes.id + '"', function () {
+                                var widget = program.getWidgetByID(attributes.id);
+
+                                expect(contextMenu.showsComponent(widget)).to.be.true;
+                            });
+                        }
+                    });
+
+                    util.each(scenario.unexpectedContextMenuItems, function (attributes) {
+                        if (attributes.type === 'program') {
+                            it('should not show a context menu item that represents the running program', function () {
+                                expect(contextMenu.showsComponent(program)).to.be.false;
+                            });
+                        } else if (attributes.type === 'event') {
+                            it('should not show a context menu item that represents event "' + attributes.name + '"', function () {
+                                var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
+
+                                expect(contextMenu.showsComponent(event)).to.be.false;
+                            });
+                        } else if (attributes.type === 'invalid_widget') {
+                            it('should not show a context menu item that represents an invalid widget', function () {
+                                expect(contextMenu.showsComponent(new Widget())).to.be.false;
+                            });
+                        } else {
+                            it('should not show a context menu item that represents widget "' + attributes.id + '"', function () {
+                                var widget = program.getWidgetByID(attributes.id);
+
+                                expect(contextMenu.showsComponent(widget)).to.be.false;
+                            });
+                        }
+                    });
                 });
             });
         });
