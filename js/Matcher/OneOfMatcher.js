@@ -39,12 +39,12 @@ define([
     util.inherit(OneOfMatcher).from(Matcher);
 
     util.extend(OneOfMatcher.prototype, {
-        match: function (text, offset) {
+        match: function (text, offset, context) {
             var matches = [],
                 lengths = [];
 
             util.each(this.subMatchers, function (subMatcher) {
-                var match = subMatcher.match(text, offset);
+                var match = subMatcher.match(text, offset, context);
 
                 if (match) {
                     matches.push(match.match);

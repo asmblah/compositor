@@ -25,7 +25,7 @@ define([
     util.inherit(ReferenceMatcher).from(Matcher);
 
     util.extend(ReferenceMatcher.prototype, {
-        match: function (text, offset) {
+        match: function (text, offset, context) {
             var matcher = this,
                 item = matcher.repository.getByName(matcher.reference);
 
@@ -33,7 +33,7 @@ define([
                 throw new Error('Non-existent item referenced in repository: "' + matcher.reference + '"');
             }
 
-            return item.match(text, offset);
+            return item.match(text, offset, context);
         }
     });
 

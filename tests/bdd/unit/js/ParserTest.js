@@ -172,15 +172,65 @@ define([
                         ]
                     },
                     expectedLength: 18
+                },
+                'when the input fully matches one clause, then next partially matches multiple clauses, with location capture': {
+                    code: 'Open the door. Whe',
+                    captureLocation: true,
+                    expectedAST: {
+                        type: 'ProgramClause',
+                        body: [
+                            [{
+                                type: 'VerbClause',
+                                verb: 'Open',
+                                article: 'the',
+                                object: 'door',
+                                location: {
+                                    start: 0,
+                                    end: 13
+                                }
+                            }],
+                            [{
+                                type: 'WhenClause',
+                                article: null,
+                                object: null,
+                                verb: null,
+                                consequence: null,
+                                location: {
+                                    start: 15,
+                                    end: 18
+                                }
+                            }, {
+                                type: 'WhereClause',
+                                object: null,
+                                location: {
+                                    start: 15,
+                                    end: 18
+                                }
+                            }]
+                        ],
+                        location: {
+                            start: 0,
+                            end: 18
+                        }
+                    },
+                    expectedLength: 18
                 }
             }, function (scenario, description) {
                 describe(description, function () {
+                    var options;
+
+                    beforeEach(function () {
+                        options = {
+                            captureLocation: !!scenario.captureLocation
+                        };
+                    });
+
                     it('should return the expected AST', function () {
-                        expect(parser.parse(scenario.code).ast).to.deep.equal(scenario.expectedAST);
+                        expect(parser.parse(scenario.code, null, options).ast).to.deep.equal(scenario.expectedAST);
                     });
 
                     it('should return a match of the correct length', function () {
-                        expect(parser.parse(scenario.code).length).to.equal(scenario.expectedLength);
+                        expect(parser.parse(scenario.code, null, options).length).to.equal(scenario.expectedLength);
                     });
                 });
             });

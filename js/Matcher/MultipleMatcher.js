@@ -33,7 +33,7 @@ define([
     util.inherit(MultipleMatcher).from(Matcher);
 
     util.extend(MultipleMatcher.prototype, {
-        match: function (text, offset) {
+        match: function (text, offset, context) {
             /*jshint loopfunc:true */
             var matcher = this,
                 length = 0,
@@ -43,7 +43,7 @@ define([
             offset = offset || 0;
 
             while (offset < text.length) {
-                match = matcher.matcher.match(text, offset);
+                match = matcher.matcher.match(text, offset, context);
 
                 if (!match) {
                     break;

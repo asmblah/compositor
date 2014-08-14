@@ -39,14 +39,14 @@ define([
     util.inherit(SequenceMatcher).from(Matcher);
 
     util.extend(SequenceMatcher.prototype, {
-        match: function (text, offset) {
+        match: function (text, offset, context) {
             var length = 0,
                 matches = [];
 
             offset = offset || 0;
 
             util.each(this.subMatchers, function (subMatcher) {
-                var match = subMatcher.match(text, offset);
+                var match = subMatcher.match(text, offset, context);
 
                 if (!match) {
                     return false;

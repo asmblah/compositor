@@ -41,9 +41,9 @@ define([
             return this.processor;
         },
 
-        match: function (text, offset) {
+        match: function (text, offset, context) {
             var clause = this,
-                match = clause.matcher.match(text, offset),
+                match = clause.matcher.match(text, offset, context),
                 node;
 
             if (!match) {
@@ -51,10 +51,17 @@ define([
             }
 
             node = util.isArray(match.match) ?
-                clause.processor.apply(null, match.match) :
-                clause.processor(match.match);
+                clause.processor.apply(context.context, match.match) :
+                clause.processor.call(context.context, match.match);
 
             node.type = clause.name + 'Clause';
+
+            if (context.captureLocation) {
+                node.location = {
+                    start: offset,
+                    end: offset + match.length
+                };
+            }
 
             return {
                 match: node,
