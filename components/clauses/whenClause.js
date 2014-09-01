@@ -25,7 +25,7 @@ define([
     var whenClause = new Clause('When', [/^When /, /^(.*?) is /, /^(.*?)/], function (match1, match2, match3) {
         var component,
             context = this,
-            event,
+            eventType,
             object,
             verbPhrase = match3 ? match3[2] : '',
             componentID = match2 ? match2[1] : '';
@@ -45,25 +45,25 @@ define([
             };
         }
 
-        if (component && (event = component.getEventByName(verbPhrase))) {
-            event = {
+        if (component && (eventType = component.getEventTypeByName(verbPhrase))) {
+            eventType = {
                 'type': 'event',
-                'name': event.getName()
+                'name': eventType.getName()
             };
         } else {
-            event = {
+            eventType = {
                 'type': 'invalid_event',
                 'invalid_verb_phrase': verbPhrase
             };
 
             if (match2) {
-                event[INVALID_MATCH_OFFSET] = match1[0].length + match2[0].length;
+                eventType[INVALID_MATCH_OFFSET] = match1[0].length + match2[0].length;
             }
         }
 
         return {
             'object': object,
-            'event': event
+            'event': eventType
         };
     }, function (node) {
         var component,
@@ -80,8 +80,8 @@ define([
             context.setContextMenuTextPosition(node[EVENT][INVALID_MATCH_OFFSET]);
             component = context.program.getWidgetByID(node[OBJECT][ID]);
 
-            util.each(component.getEvents(), function (event) {
-                context.addContextMenuItem(event);
+            util.each(component.getEventTypes(), function (eventType) {
+                context.addContextMenuItem(eventType);
             });
         }
     });

@@ -8,29 +8,24 @@
 
 /*global define */
 define([
-    'js/util'
+    'js/util',
+    'js/Event/EventTarget'
 ], function (
-    util
+    util,
+    EventTarget
 ) {
     'use strict';
 
     function Component(options) {
-        this.events = {};
+        EventTarget.call(this);
+
         this.options = options || {};
     }
 
+    util.inherit(Component).from(EventTarget);
+
     util.extend(Component.prototype, {
-        addEvent: function (event) {
-            this.events[event.getName()] = event;
-        },
 
-        getEventByName: function (name) {
-            return this.events[name];
-        },
-
-        getEvents: function () {
-            return this.events;
-        }
     });
 
     return Component;

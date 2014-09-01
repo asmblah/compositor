@@ -9,33 +9,47 @@
 /*global define */
 define([
     'js/util',
-    'js/Promise',
-    'js/Repository/WidgetRepository'
+    'js/Promise'
 ], function (
     util,
-    Promise,
-    WidgetRepository
+    Promise
 ) {
     'use strict';
 
-    var EXTENDS = 'extends';
+    var TYPE = 'type';
 
-    function Program(clauseRepository, widgetRepository, options) {
+    function Program(clauseRepository, widgetTypeRepository, widgetRepository, options) {
+        this.canvasWidget = widgetTypeRepository.getWidgetTypeByName('canvas').spawn();
         this.clauseRepository = clauseRepository;
         this.options = options;
-        this.parentWidgetRepository = widgetRepository;
-        this.widgetRepository = new WidgetRepository();
+        this.widgetRepository = widgetRepository;
+        this.widgetTypeRepository = widgetTypeRepository;
     }
 
     util.extend(Program.prototype, {
+        exportSnapshot: function () {
+            var program = this;
+
+            return {
+                behaviour: {
+
+                },
+                ui: program.canvasWidget.exportSnapshot()
+            };
+        },
+
         getWidgetByID: function (id) {
             var program = this;
 
-            return program.widgetRepository.getWidgetByID(id) || program.parentWidgetRepository.getWidgetByID(id) || null;
+            return program.widgetRepository.getWidgetByID(id) || null;
         },
 
         getWidgets: function () {
             return this.widgetRepository.getWidgets();
+        },
+
+        getWidgetTypeByName: function (name) {
+            return this.widgetTypeRepository.getWidgetTypeByName(name);
         },
 
         load: function (components) {
@@ -43,9 +57,9 @@ define([
                 promise = new Promise();
 
             util.each(components.widgets, function (attributes, id) {
-                var parentWidget = program.getWidgetByID(attributes[EXTENDS]);
+                var widgetType = program.widgetTypeRepository.getWidgetTypeByName(attributes[TYPE]);
 
-                program.widgetRepository.add(parentWidget.extend(id, attributes));
+                program.widgetRepository.add(widgetType.spawn(id, attributes));
             });
 
             promise.resolve();

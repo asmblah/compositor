@@ -12,20 +12,22 @@ define([
     'js/Display',
     'js/Editor',
     'js/Program',
-    'js/Walker'
+    'js/Walker',
+    'js/Repository/WidgetRepository'
 ], function (
     util,
     Display,
     Editor,
     Program,
-    Walker
+    Walker,
+    WidgetRepository
 ) {
     'use strict';
 
-    function Compositor(clauseRepository, widgetRepository, parser) {
+    function Compositor(clauseRepository, widgetTypeClassRepository, parser) {
         this.clauseRepository = clauseRepository;
         this.parser = parser;
-        this.widgetRepository = widgetRepository;
+        this.widgetTypeClassRepository = widgetTypeClassRepository;
     }
 
     util.extend(Compositor.prototype, {
@@ -44,11 +46,14 @@ define([
         },
 
         createProgram: function (options) {
-            var compositor = this;
+            var compositor = this,
+                widgetRepository = new WidgetRepository(),
+                widgetTypeRepository = compositor.widgetTypeClassRepository.createWidgetTypeRepository(widgetRepository);
 
             return new Program(
                 compositor.clauseRepository,
-                compositor.widgetRepository,
+                widgetTypeRepository,
+                widgetRepository,
                 options
             );
         }

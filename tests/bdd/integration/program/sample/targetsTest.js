@@ -11,7 +11,7 @@ define([
     './Fixtures/targetsComponents',
     'js/util',
     'js/Compositor',
-    'js/Widget'
+    'js/Widget/Widget'
 ], function (
     components,
     util,

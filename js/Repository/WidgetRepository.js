@@ -9,7 +9,7 @@
 /*global define */
 define([
     'js/util',
-    'js/Widget'
+    'js/Widget/Widget'
 ], function (
     util,
     Widget
@@ -17,7 +17,7 @@ define([
     'use strict';
 
     function WidgetRepository(widgets) {
-        this.widgets = {};
+        this.widgets = [];
 
         this.addMultiple(widgets);
     }
@@ -28,7 +28,7 @@ define([
                 throw new Error('Non widget given');
             }
 
-            this.widgets[widget.getID()] = widget;
+            this.widgets.push(widget);
         },
 
         addMultiple: function (widgets) {
@@ -40,7 +40,16 @@ define([
         },
 
         getWidgetByID: function (id) {
-            return this.widgets[id] || null;
+            var widget = null;
+
+            util.each(this.widgets, function (otherWidget) {
+                if (otherWidget.getID() === id) {
+                    widget = otherWidget;
+                    return false;
+                }
+            });
+
+            return widget;
         },
 
         getWidgets: function () {

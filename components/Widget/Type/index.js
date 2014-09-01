@@ -8,13 +8,25 @@
 
 /*global define */
 define([
-    './buttonWidget'
+    './ButtonType',
+    './CanvasType',
+    './PageType',
+    './RowType',
+    './TextType'
 ], function (
-    buttonWidget
+    ButtonType,
+    CanvasType,
+    PageType,
+    RowType,
+    TextType
 ) {
     'use strict';
 
     return [
-        buttonWidget
+        ButtonType,
+        CanvasType,
+        PageType,
+        RowType,
+        TextType
     ];
 });

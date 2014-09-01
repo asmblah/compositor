@@ -10,21 +10,21 @@
 define([
     'components/clauses/index',
     'js/util',
-    'components/widgets/index',
+    'components/Widget/Type/index',
     'js/Repository/ClauseRepository',
     'js/Compositor',
     'js/Parser',
-    'js/Widget',
-    'js/Repository/WidgetRepository'
+    'js/Widget/Widget',
+    'js/Repository/WidgetTypeClassRepository'
 ], function (
     clauses,
     util,
-    widgets,
+    widgetTypeClasses,
     ClauseRepository,
     Compositor,
     Parser,
     Widget,
-    WidgetRepository
+    WidgetTypeClassRepository
 ) {
     'use strict';
 
@@ -38,9 +38,9 @@ define([
         beforeEach(function () {
             var clauseRepository = new ClauseRepository(clauses),
                 parser = new Parser(clauseRepository, 'Program'),
-                widgetRepository = new WidgetRepository(widgets);
+                widgetTypeClassRepository = new WidgetTypeClassRepository(widgetTypeClasses);
 
-            compositor = new Compositor(clauseRepository, widgetRepository, parser);
+            compositor = new Compositor(clauseRepository, widgetTypeClassRepository, parser);
 
             program = compositor.createProgram();
             editor = compositor.createEditor();
@@ -70,8 +70,8 @@ define([
             'when the program has two widgets and the developer types "When" followed by a space': {
                 initialComponents: {
                     widgets: {
-                        'button1': {extends: 'button'},
-                        'button2': {extends: 'button'}
+                        'button1': {type: 'button'},
+                        'button2': {type: 'button'}
                     }
                 },
                 typedText: 'When ',
@@ -89,7 +89,7 @@ define([
             'when the developer views a list of available events of a widget by typing "When " then selecting the widget and typing a space': {
                 initialComponents: {
                     widgets: {
-                        'my_button': {extends: 'button'}
+                        'my_button': {type: 'button'}
                     }
                 },
                 typedText: 'When my_button ',
@@ -140,7 +140,7 @@ define([
                             });
                         } else if (attributes.type === 'event') {
                             it('should show a context menu item that represents event "' + attributes.name + '"', function () {
-                                var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
+                                var event = program.getWidgetByID(attributes.widgetID).getEventTypeByName(attributes.name);
 
                                 expect(contextMenu.showsComponent(event)).to.be.true;
                             });
@@ -160,7 +160,7 @@ define([
                             });
                         } else if (attributes.type === 'event') {
                             it('should not show a context menu item that represents event "' + attributes.name + '"', function () {
-                                var event = program.getWidgetByID(attributes.widgetID).getEventByName(attributes.name);
+                                var event = program.getWidgetByID(attributes.widgetID).getEventTypeByName(attributes.name);
 
                                 expect(contextMenu.showsComponent(event)).to.be.false;
                             });

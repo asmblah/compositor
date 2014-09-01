@@ -8,27 +8,28 @@
 
 /*global define */
 define([
-    'js/util',
-    'js/Component'
+    'js/util'
 ], function (
-    util,
-    Component
+    util
 ) {
     'use strict';
 
-    function Event(name, options) {
-        Component.call(this, options);
+    var TYPE = 'type';
 
+    function Attribute(name, exporter) {
+        this.exporter = exporter;
         this.name = name;
     }
 
-    util.inherit(Event).from(Component);
+    util.extend(Attribute.prototype, {
+        exportForWidget: function (widget) {
+            return this.exporter(widget);
+        },
 
-    util.extend(Event.prototype, {
         getName: function () {
             return this.name;
         }
     });
 
-    return Event;
+    return Attribute;
 });
