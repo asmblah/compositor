@@ -9,20 +9,24 @@
 /*global define */
 define([
     'components/clauses/index',
+    'components/Entity/Property/Type/index',
     'js/util',
     'components/Widget/Type/index',
     'js/Repository/ClauseRepository',
     'js/Compositor',
     'js/Parser',
+    'js/Repository/PropertyTypeClassRepository',
     'js/Widget/Widget',
     'js/Repository/WidgetTypeClassRepository'
 ], function (
     clauses,
+    propertyTypeClasses,
     util,
     widgetTypeClasses,
     ClauseRepository,
     Compositor,
     Parser,
+    PropertyTypeClassRepository,
     Widget,
     WidgetTypeClassRepository
 ) {
@@ -38,9 +42,10 @@ define([
         beforeEach(function () {
             var clauseRepository = new ClauseRepository(clauses),
                 parser = new Parser(clauseRepository, 'Program'),
+                propertyTypeClassRepository = new PropertyTypeClassRepository(propertyTypeClasses),
                 widgetTypeClassRepository = new WidgetTypeClassRepository(widgetTypeClasses);
 
-            compositor = new Compositor(clauseRepository, widgetTypeClassRepository, parser);
+            compositor = new Compositor(clauseRepository, widgetTypeClassRepository, propertyTypeClassRepository, parser);
 
             program = compositor.createProgram();
             editor = compositor.createEditor();

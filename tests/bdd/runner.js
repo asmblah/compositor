@@ -60,6 +60,7 @@ define({
 
         require([
             'bdd/integration/editor/clauses/whenTest',
+            'bdd/integration/editor/datastore/textTest',
             'bdd/integration/editor/ui/rowTest',
             'bdd/unit/js/makePartialRegexTest',
             'bdd/unit/js/ParserTest'

@@ -11,6 +11,7 @@ define([
     'js/util',
     'js/Display',
     'js/Editor',
+    'js/Repository/EntityDefinitionRepository',
     'js/Program',
     'js/Walker',
     'js/Repository/WidgetRepository'
@@ -18,15 +19,17 @@ define([
     util,
     Display,
     Editor,
+    EntityDefinitionRepository,
     Program,
     Walker,
     WidgetRepository
 ) {
     'use strict';
 
-    function Compositor(clauseRepository, widgetTypeClassRepository, parser) {
+    function Compositor(clauseRepository, widgetTypeClassRepository, propertyTypeClassRepository, parser) {
         this.clauseRepository = clauseRepository;
         this.parser = parser;
+        this.propertyTypeClassRepository = propertyTypeClassRepository;
         this.widgetTypeClassRepository = widgetTypeClassRepository;
     }
 
@@ -47,6 +50,8 @@ define([
 
         createProgram: function (options) {
             var compositor = this,
+                entityDefinitionRepository = new EntityDefinitionRepository(),
+                propertyTypeRepository = compositor.propertyTypeClassRepository.createPropertyTypeRepository(),
                 widgetRepository = new WidgetRepository(),
                 widgetTypeRepository = compositor.widgetTypeClassRepository.createWidgetTypeRepository(widgetRepository);
 
@@ -54,6 +59,8 @@ define([
                 compositor.clauseRepository,
                 widgetTypeRepository,
                 widgetRepository,
+                entityDefinitionRepository,
+                propertyTypeRepository,
                 options
             );
         }
