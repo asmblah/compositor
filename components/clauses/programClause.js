@@ -38,6 +38,14 @@ define([
         util.each(node[BODY], function (subNode) {
             walkSubNode(subNode[0]);
         });
+    }, function (node, interpret) {
+        var code = '';
+
+        util.each(node[BODY][0], function (bodyNode) {
+            code += interpret(bodyNode);
+        });
+
+        return code;
     });
 
     return programClause;

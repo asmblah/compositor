@@ -59,9 +59,11 @@ define({
         mocha.suite.emit('pre-require', global, null, mocha);
 
         require([
+            'bdd/integration/editor/clauses/showTest',
             'bdd/integration/editor/clauses/whenTest',
             'bdd/integration/editor/datastore/textTest',
             'bdd/integration/editor/ui/rowTest',
+            'bdd/integration/program/sample/adderTest',
             'bdd/unit/js/makePartialRegexTest',
             'bdd/unit/js/ParserTest'
         ], function () {

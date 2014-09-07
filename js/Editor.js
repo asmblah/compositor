@@ -17,6 +17,7 @@ define([
     'use strict';
 
     function Editor(parser, walker, options) {
+        this.ast = null;
         this.contextMenu = new ContextMenu();
         this.options = options;
         this.parser = parser;
@@ -25,6 +26,10 @@ define([
     }
 
     util.extend(Editor.prototype, {
+        getAST: function () {
+            return this.ast;
+        },
+
         getContextMenu: function () {
             return this.contextMenu;
         },
@@ -50,6 +55,8 @@ define([
             if (editor.contextMenu.getItems().length > 0) {
                 editor.contextMenu.show();
             }
+
+            editor.ast = ast;
         },
 
         load: function (program) {

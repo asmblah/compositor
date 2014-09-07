@@ -18,11 +18,12 @@ define([
 ) {
     'use strict';
 
-    function EventType(name) {
+    function EventType(name, phrases) {
         Component.call(this);
 
         this.context = null;
         this.name = name;
+        this.phrases = phrases;
     }
 
     util.inherit(EventType).from(Component);
@@ -37,6 +38,19 @@ define([
 
         getName: function () {
             return this.name;
+        },
+
+        hasPhrase: function (phrase) {
+            var hasPhrase = false;
+
+            util.each(this.phrases, function (otherPhrase) {
+                if (otherPhrase === phrase) {
+                    hasPhrase = true;
+                    return false;
+                }
+            });
+
+            return hasPhrase;
         },
 
         setContext: function (context) {

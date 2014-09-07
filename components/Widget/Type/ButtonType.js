@@ -21,7 +21,7 @@ define([
     function ButtonType(widgetRepository) {
         WidgetType.call(this, widgetRepository, 'button');
 
-        this.addEventType(new EventType('click'));
+        this.addEventType(new EventType('click', ['clicked']));
     }
 
     util.inherit(ButtonType).from(WidgetType);

@@ -12,12 +12,14 @@ define([
     './CanvasType',
     './PageType',
     './RowType',
+    './TextBoxType',
     './TextType'
 ], function (
     ButtonType,
     CanvasType,
     PageType,
     RowType,
+    TextBoxType,
     TextType
 ) {
     'use strict';
@@ -27,6 +29,7 @@ define([
         CanvasType,
         PageType,
         RowType,
+        TextBoxType,
         TextType
     ];
 });

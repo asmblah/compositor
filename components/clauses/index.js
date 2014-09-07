@@ -8,16 +8,22 @@
 
 /*global define */
 define([
+    './arithmeticClause',
     './programClause',
+    './showClause',
     './whenClause'
 ], function (
+    arithmeticClause,
     programClause,
+    showClause,
     whenClause
 ) {
     'use strict';
 
     return [
+        arithmeticClause,
         programClause,
+        showClause,
         whenClause
     ];
 });

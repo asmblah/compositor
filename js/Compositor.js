@@ -12,6 +12,7 @@ define([
     'js/Display',
     'js/Editor',
     'js/Repository/EntityDefinitionRepository',
+    'js/Interpreter',
     'js/Program',
     'js/Walker',
     'js/Repository/WidgetRepository'
@@ -20,6 +21,7 @@ define([
     Display,
     Editor,
     EntityDefinitionRepository,
+    Interpreter,
     Program,
     Walker,
     WidgetRepository
@@ -51,6 +53,7 @@ define([
         createProgram: function (options) {
             var compositor = this,
                 entityDefinitionRepository = new EntityDefinitionRepository(),
+                interpreter = new Interpreter(compositor.clauseRepository),
                 propertyTypeRepository = compositor.propertyTypeClassRepository.createPropertyTypeRepository(),
                 widgetRepository = new WidgetRepository(),
                 widgetTypeRepository = compositor.widgetTypeClassRepository.createWidgetTypeRepository(widgetRepository);
@@ -61,6 +64,7 @@ define([
                 widgetRepository,
                 entityDefinitionRepository,
                 propertyTypeRepository,
+                interpreter,
                 options
             );
         }

@@ -62,6 +62,19 @@ define([
             return this.eventTypes[name] || null;
         },
 
+        getEventTypeByPhrase: function (phrase) {
+            var eventType = null;
+
+            util.each(this.eventTypes, function (otherEventType) {
+                if (otherEventType.hasPhrase(phrase)) {
+                    eventType = otherEventType;
+                    return false;
+                }
+            });
+
+            return eventType;
+        },
+
         getEventTypes: function () {
             return util.extend({}, this.eventTypes);
         },

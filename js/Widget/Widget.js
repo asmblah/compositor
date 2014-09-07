@@ -23,6 +23,7 @@ define([
         this.children = [];
         this.id = id || null;
         this.parent = null;
+        this.textContent = '';
         this.type = type;
     }
 
@@ -31,6 +32,10 @@ define([
     util.extend(Widget.prototype, {
         appendChild: function (child) {
             this.children.push(child);
+        },
+
+        click: function () {
+            this.emit('click');
         },
 
         exportSnapshot: function () {
@@ -51,6 +56,10 @@ define([
             return this.type.getEventTypeByName(name);
         },
 
+        getEventTypeByPhrase: function (phrase) {
+            return this.type.getEventTypeByPhrase(phrase);
+        },
+
         getEventTypes: function () {
             return this.type.getEventTypes();
         },
@@ -63,8 +72,17 @@ define([
             return this.parent;
         },
 
+        getTextContent: function () {
+            return this.textContent;
+        },
+
         setParent: function (parent) {
             this.parent = parent;
+        },
+
+        setTextContent: function (text) {
+            // Always cast text content value to string
+            this.textContent = text + '';
         }
     });
 

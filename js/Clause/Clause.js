@@ -18,9 +18,10 @@ define([
 ) {
     'use strict';
 
-    function Clause(name, matcher, processor, walker, options) {
+    function Clause(name, matcher, processor, walker, interpreter, options) {
         Component.call(this, options);
 
+        this.interpreter = interpreter;
         this.name = name;
         this.matcher = matchers.from(matcher);
         this.processor = processor;
@@ -40,6 +41,10 @@ define([
 
         getProcessor: function () {
             return this.processor;
+        },
+
+        interpret: function (node, interpret) {
+            return this.interpreter(node, interpret);
         },
 
         match: function (text, offset, context) {

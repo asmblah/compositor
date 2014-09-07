@@ -9,21 +9,21 @@
 /*global define */
 define([
     'js/util',
-    'js/Entity/EntityDefinition',
-    'js/Promise'
+    'js/Entity/EntityDefinition'
 ], function (
     util,
-    EntityDefinition,
-    Promise
+    EntityDefinition
 ) {
     'use strict';
 
     var TYPE = 'type';
 
-    function Program(clauseRepository, widgetTypeRepository, widgetRepository, entityDefinitionRepository, propertyTypeRepository, options) {
+    function Program(clauseRepository, widgetTypeRepository, widgetRepository, entityDefinitionRepository, propertyTypeRepository, interpreter, options) {
+        this.behaviourNode = null;
         this.canvasWidget = widgetTypeRepository.getWidgetTypeByName('canvas').spawn();
         this.clauseRepository = clauseRepository;
         this.entityDefinitionRepository = entityDefinitionRepository;
+        this.interpreter = interpreter;
         this.options = options;
         this.propertyTypeRepository = propertyTypeRepository;
         this.widgetRepository = widgetRepository;
@@ -82,17 +82,33 @@ define([
 
         load: function (components) {
             var program = this,
-                promise = new Promise();
+                promise;
 
-            util.each(components.widgets, function (attributes, id) {
+            components = components || {};
+
+            if (components.widgets) {
+                program.loadUI(components.widgets);
+            }
+
+            promise = program.interpreter.interpret(program, components.behaviour || program.behaviourNode);
+
+            return promise;
+        },
+
+        loadBehaviour: function (behaviourNode) {
+            this.behaviourNode = behaviourNode;
+        },
+
+        loadUI: function (widgets) {
+            var program = this;
+
+            program.widgets = widgets;
+
+            util.each(widgets, function (attributes, id) {
                 var widgetType = program.widgetTypeRepository.getWidgetTypeByName(attributes[TYPE]);
 
                 program.widgetRepository.add(widgetType.spawn(id, attributes));
             });
-
-            promise.resolve();
-
-            return promise;
         }
     });
 

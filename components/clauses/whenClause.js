@@ -16,18 +16,20 @@ define([
 ) {
     'use strict';
 
-    var EVENT = 'event',
+    var ACTION = 'action',
+        EVENT = 'event',
         ID = 'id',
         INVALID_MATCH_OFFSET = 'invalid_match_offset',
+        NAME = 'name',
         OBJECT = 'object',
         TYPE = 'type';
 
-    var whenClause = new Clause('When', [/^When /, /^(.*?) is /, /^(.*?)/], function (match1, match2, match3) {
+    var whenClause = new Clause('When', [/^When /, /^(.*?) is /, /^(.*?), /, 'Show'], function (match1, match2, match3, action) {
         var component,
             context = this,
             eventType,
             object,
-            verbPhrase = match3 ? match3[2] : '',
+            verbPhrase = match3 ? match3[1] : '',
             componentID = match2 ? match2[1] : '';
 
         component = context.program.getWidgetByID(componentID);
@@ -45,7 +47,7 @@ define([
             };
         }
 
-        if (component && (eventType = component.getEventTypeByName(verbPhrase))) {
+        if (component && (eventType = component.getEventTypeByPhrase(verbPhrase))) {
             eventType = {
                 'type': 'event',
                 'name': eventType.getName()
@@ -63,9 +65,10 @@ define([
 
         return {
             'object': object,
-            'event': eventType
+            'event': eventType,
+            'action': action
         };
-    }, function (node) {
+    }, function (node, walkSubNode) {
         var component,
             context = this;
 
@@ -84,6 +87,15 @@ define([
                 context.addContextMenuItem(eventType);
             });
         }
+
+        if (node[ACTION]) {
+            walkSubNode(node[ACTION]);
+        }
+    }, function (node, interpret) {
+        var body = interpret(node[ACTION]),
+            code = 'program.getWidgetByID("' + node[OBJECT][ID] + '").on("' + node[EVENT][NAME] + '", function () {' + body + '});';
+
+        return code;
     });
 
     return whenClause;
