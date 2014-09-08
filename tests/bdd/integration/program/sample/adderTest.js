@@ -45,7 +45,8 @@ EOS
                     type: 'textbox'
                 },
                 'result': {
-                    type: 'text'
+                    type: 'textbox',
+                    textContent: '3'
                 },
                 'calculate': {
                     type: 'button'
@@ -77,6 +78,18 @@ EOS
         });
 
         util.each({
+            'when the user does not click "Calculate"': {
+                uiInteractions: [
+                    {type: 'enter text', widget: 'lhs', text: '4'},
+                    {type: 'enter text', widget: 'rhs', text: '2'}
+                ],
+                expectedResults: {
+                    'should leave the initial 3 in result': {
+                        widget: 'result',
+                        expectedTextContent: '3'
+                    }
+                }
+            },
             'when the user adds 2 to 3': {
                 uiInteractions: [
                     {type: 'enter text', widget: 'lhs', text: '2'},
