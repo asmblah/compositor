@@ -16,14 +16,15 @@ define([
 ) {
     'use strict';
 
+    var TEXT_CONTENT = 'textContent';
+
     function Widget(type, id, attributes) {
         Component.call(this);
 
-        this.attributes = attributes;
+        this.attributes = attributes || {};
         this.children = [];
         this.id = id || null;
         this.parent = null;
-        this.textContent = '';
         this.type = type;
     }
 
@@ -31,7 +32,10 @@ define([
 
     util.extend(Widget.prototype, {
         appendChild: function (child) {
-            this.children.push(child);
+            var widget = this;
+
+            child.setParent(widget);
+            widget.children.push(child);
         },
 
         click: function () {
@@ -46,6 +50,19 @@ define([
 
         getAttributeByName: function (name) {
             return this.attributes[name] || null;
+        },
+
+        getChildByTextContent: function (text) {
+            var child = null;
+
+            util.each(this.children, function (otherChild) {
+                if (otherChild.getTextContent() === text) {
+                    child = otherChild;
+                    return false;
+                }
+            });
+
+            return child;
         },
 
         getChildren: function () {
@@ -73,7 +90,11 @@ define([
         },
 
         getTextContent: function () {
-            return this.textContent;
+            return this.attributes[TEXT_CONTENT] || '';
+        },
+
+        select: function () {
+            this.emit('select');
         },
 
         setParent: function (parent) {
@@ -82,7 +103,7 @@ define([
 
         setTextContent: function (text) {
             // Always cast text content value to string
-            this.textContent = text + '';
+            this.attributes[TEXT_CONTENT] = text + '';
         }
     });
 

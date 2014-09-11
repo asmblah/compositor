@@ -20,7 +20,7 @@ define([
         LEFT_HAND_OBJECT = 'leftHandObject',
         RIGHT_HAND_OBJECT = 'rightHandObject';
 
-    var arithmeticClause = new Clause('Arithmetic', [/^(.*?) plus ([^ ]+)/], function (match1) {
+    var arithmeticClause = new Clause('Arithmetic', [/^([^ ]+?) plus ([^ ]+)/], function (match1) {
         var context = this,
             leftHandComponentID = match1 ? match1[1] : '',
             rightHandComponentID = match1 ? match1[2] : '';

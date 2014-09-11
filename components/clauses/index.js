@@ -9,11 +9,15 @@
 /*global define */
 define([
     './arithmeticClause',
+    './countClause',
+    './filterType',
     './programClause',
     './showClause',
     './whenClause'
 ], function (
     arithmeticClause,
+    countClause,
+    filterType,
     programClause,
     showClause,
     whenClause
@@ -22,6 +26,8 @@ define([
 
     return [
         arithmeticClause,
+        countClause,
+        filterType,
         programClause,
         showClause,
         whenClause

@@ -10,15 +10,19 @@
 define([
     './ButtonType',
     './CanvasType',
+    './OptionType',
     './PageType',
     './RowType',
+    './SelectType',
     './TextBoxType',
     './TextType'
 ], function (
     ButtonType,
     CanvasType,
+    OptionType,
     PageType,
     RowType,
+    SelectType,
     TextBoxType,
     TextType
 ) {
@@ -27,8 +31,10 @@ define([
     return [
         ButtonType,
         CanvasType,
+        OptionType,
         PageType,
         RowType,
+        SelectType,
         TextBoxType,
         TextType
     ];

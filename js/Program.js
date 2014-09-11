@@ -18,11 +18,12 @@ define([
 
     var TYPE = 'type';
 
-    function Program(clauseRepository, widgetTypeRepository, widgetRepository, entityDefinitionRepository, propertyTypeRepository, interpreter, options) {
+    function Program(clauseRepository, widgetTypeRepository, widgetRepository, entityDefinitionRepository, entityRepository, propertyTypeRepository, interpreter, options) {
         this.behaviourNode = null;
         this.canvasWidget = widgetTypeRepository.getWidgetTypeByName('canvas').spawn();
         this.clauseRepository = clauseRepository;
         this.entityDefinitionRepository = entityDefinitionRepository;
+        this.entityRepository = entityRepository;
         this.interpreter = interpreter;
         this.options = options;
         this.propertyTypeRepository = propertyTypeRepository;
@@ -32,7 +33,12 @@ define([
 
     util.extend(Program.prototype, {
         createEntityDefinition: function (name) {
-            this.entityDefinitionRepository.add(new EntityDefinition(name));
+            var program = this,
+                entityDefinition = new EntityDefinition(program.entityRepository, name);
+
+            program.entityDefinitionRepository.add(entityDefinition);
+
+            return entityDefinition;
         },
 
         exportDataStructureSnapshot: function () {
@@ -99,6 +105,33 @@ define([
             this.behaviourNode = behaviourNode;
         },
 
+        loadEntities: function (entityDataset) {
+            var program = this;
+
+            util.each(entityDataset, function (entityRecords, entityDefinitionName) {
+                var entityDefinition = program.getEntityDefinitionByName(entityDefinitionName);
+
+                util.each(entityRecords, function (entityRecord) {
+                    entityDefinition.spawn(entityRecord);
+                });
+            });
+        },
+
+        loadEntityDefinitions: function (entityDefinitions) {
+            var program = this;
+
+            util.each(entityDefinitions, function (attributes, name) {
+                var entityDefinition = program.createEntityDefinition(name);
+
+                util.each(attributes.properties, function (propertyData) {
+                    var propertyType = program.getPropertyTypeByName(propertyData.property),
+                        property = propertyType.spawn(propertyData.name);
+
+                    entityDefinition.addProperty(property);
+                });
+            });
+        },
+
         loadUI: function (widgets) {
             var program = this;
 
@@ -107,7 +140,7 @@ define([
             util.each(widgets, function (attributes, id) {
                 var widgetType = program.widgetTypeRepository.getWidgetTypeByName(attributes[TYPE]);
 
-                program.widgetRepository.add(widgetType.spawn(id, attributes));
+                widgetType.spawn(id, attributes);
             });
         }
     });

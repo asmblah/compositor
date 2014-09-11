@@ -64,6 +64,7 @@ define({
             'bdd/integration/editor/datastore/textTest',
             'bdd/integration/editor/ui/rowTest',
             'bdd/integration/program/sample/adderTest',
+            'bdd/integration/program/sample/bookingsTest',
             'bdd/unit/js/makePartialRegexTest',
             'bdd/unit/js/ParserTest'
         ], function () {

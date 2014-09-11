@@ -12,6 +12,7 @@ define([
     'js/Display',
     'js/Editor',
     'js/Repository/EntityDefinitionRepository',
+    'js/Repository/EntityRepository',
     'js/Interpreter',
     'js/Program',
     'js/Walker',
@@ -21,6 +22,7 @@ define([
     Display,
     Editor,
     EntityDefinitionRepository,
+    EntityRepository,
     Interpreter,
     Program,
     Walker,
@@ -63,6 +65,7 @@ define([
                 widgetTypeRepository,
                 widgetRepository,
                 entityDefinitionRepository,
+                new EntityRepository(),
                 propertyTypeRepository,
                 interpreter,
                 options

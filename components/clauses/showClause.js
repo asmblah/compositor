@@ -8,9 +8,11 @@
 
 /*global define */
 define([
+    'js/Matcher/matchers',
     'js/util',
     'js/Clause/Clause'
 ], function (
+    matchers,
     util,
     Clause
 ) {
@@ -22,11 +24,11 @@ define([
         OBJECT = 'object',
         TYPE = 'type';
 
-    var showClause = new Clause('Show', [/^show /, 'Arithmetic', /^ in ([^ ]+)/], function (match1, match2, match3) {
+    var showClause = new Clause('Show', [/^show /, new matchers.OneOf(['Arithmetic', 'Count']), /^ in ([^ ]+)/], function (match1, match2, match3) {
         var component,
             context = this,
             object,
-            arithmeticExpression = match2 ? match2 : {
+            arithmeticExpression = match2 ? match2[0] : {
                 'type': 'invalid_expression'
             },
             componentID = match3 ? match3[1] : '';
@@ -42,7 +44,7 @@ define([
             object = {
                 'type': 'invalid_component',
                 'invalid_id': componentID,
-                'invalid_match_offset': match2.location.end + match3[0].length
+                'invalid_match_offset': match2[0].location.end + (match3 ? match3[0].length : 0)
             };
         }
 

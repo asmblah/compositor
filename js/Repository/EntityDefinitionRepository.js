@@ -43,7 +43,7 @@ define([
             var entityDefinition = null;
 
             util.each(this.entityDefinitions, function (otherEntityDefinition) {
-                if (otherEntityDefinition.getName() === name) {
+                if (otherEntityDefinition.getName().toLowerCase() === name.toLowerCase()) {
                     entityDefinition = otherEntityDefinition;
                     return false;
                 }

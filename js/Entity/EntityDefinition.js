@@ -8,13 +8,16 @@
 
 /*global define */
 define([
-    'js/util'
+    'js/util',
+    './Entity'
 ], function (
-    util
+    util,
+    Entity
 ) {
     'use strict';
 
-    function EntityDefinition(name) {
+    function EntityDefinition(entityRepository, name) {
+        this.entityRepository = entityRepository;
         this.name = name;
         this.properties = [];
     }
@@ -36,8 +39,44 @@ define([
             };
         },
 
+        getEntitiesBy: function (expectedProperties) {
+            var entities = [];
+
+            util.each(this.entityRepository.getEntities(), function (entity) {
+                util.each(expectedProperties, function (value, name) {
+                    if (entity.getPropertyByName(name) === value) {
+                        entities.push(entity);
+                    }
+                });
+            });
+
+            return entities;
+        },
+
         getName: function () {
             return this.name;
+        },
+
+        getPropertyByName: function (name) {
+            var property = null;
+
+            util.each(this.properties, function (otherProperty) {
+                if (otherProperty.getName().toLowerCase() === name.toLowerCase()) {
+                    property = otherProperty;
+                    return false;
+                }
+            });
+
+            return property;
+        },
+
+        spawn: function (data) {
+            var entityDefinition = this,
+                entity = new Entity(entityDefinition, data);
+
+            entityDefinition.entityRepository.add(entity);
+
+            return entity;
         }
     });
 
