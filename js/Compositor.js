@@ -10,6 +10,7 @@
 define([
     'js/util',
     'js/Display',
+    'js/Renderer/DOMRenderer',
     'js/Editor',
     'js/Repository/EntityDefinitionRepository',
     'js/Repository/EntityRepository',
@@ -20,6 +21,7 @@ define([
 ], function (
     util,
     Display,
+    DOMRenderer,
     Editor,
     EntityDefinitionRepository,
     EntityRepository,
@@ -40,6 +42,10 @@ define([
     util.extend(Compositor.prototype, {
         createDisplay: function (options) {
             return new Display(options);
+        },
+
+        createDOMRenderer: function (domElement) {
+            return new DOMRenderer(domElement.ownerDocument, domElement);
         },
 
         createEditor: function (options) {

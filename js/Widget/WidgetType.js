@@ -88,7 +88,7 @@ define([
                 widget = new Widget(type, id, attributes);
 
             type.widgetRepository.add(widget);
-            type.emit('spawn', widget);
+            type.emit('post.spawn', widget);
 
             return widget;
         }

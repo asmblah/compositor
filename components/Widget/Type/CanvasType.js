@@ -31,7 +31,7 @@ define([
             return snapshot;
         }));
 
-        this.on('spawn', function (widget) {
+        this.on('post.spawn', function (widget) {
             var defaultPage = widgetTypeRepository.getWidgetTypeByName('page').spawn('page1');
 
             widget.appendChild(defaultPage);

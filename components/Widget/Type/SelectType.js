@@ -21,7 +21,7 @@ define([
     function SelectType(widgetRepository, widgetTypeRepository) {
         WidgetType.call(this, widgetRepository, 'select');
 
-        this.on('spawn', function (widget) {
+        this.on('post.spawn', function (widget) {
             util.each(widget.getAttributeByName('options'), function (optionText) {
                 var optionWidget = widgetTypeRepository.getWidgetTypeByName('option').spawn();
 

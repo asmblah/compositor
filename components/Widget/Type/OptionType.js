@@ -21,7 +21,7 @@ define([
     function OptionType(widgetRepository) {
         WidgetType.call(this, widgetRepository, 'option');
 
-        this.on('spawn', function (widget) {
+        this.on('post.spawn', function (widget) {
             widget.on('select', function () {
                 widget.getParent().setTextContent(widget.getTextContent());
             });

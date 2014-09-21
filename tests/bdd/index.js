@@ -14,7 +14,8 @@
         optionsManager = require('node-getopt').create([
             ['g', 'grep=<pattern>', 'Optional filter grep to restrict tests to run']
         ]),
-        parsedOptions = optionsManager.parseSystem();
+        parsedOptions = optionsManager.parseSystem(),
+        jsdom = require('jsdom').jsdom;
 
     // FIXME: Modular.js is reading the wrong value as "global" ("this" object is not global in Node.js)
     modular.util.global = global;
@@ -34,6 +35,24 @@
     });
     modular.define('sinon-chai/sinon-chai', function () {
         return require('sinon-chai');
+    });
+    modular.define('test-environment', function () {
+        return {
+            click: function (element) {
+                var event = element.ownerDocument.createEvent('MouseEvents');
+                event.initEvent('click', true, true);
+                element.dispatchEvent(event);
+            },
+            createWindow: function () {
+                return jsdom().createWindow();
+            },
+            destroyWindow: function (window) {
+                window.close();
+            },
+            selectOption: function (optionElement) {
+                optionElement.parentNode.value = optionElement.value;
+            }
+        };
     });
 
     // FIXME!! (In Modular)

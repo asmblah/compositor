@@ -13,7 +13,7 @@ require.config({
     }
 });
 
-/*global define */
+/*global define, document */
 define({
     cache: false
 }, [
@@ -33,6 +33,27 @@ define({
 
     define('Mocha', function () {
         return global.Mocha;
+    });
+
+    define('test-environment', function () {
+        return {
+            click: function (element) {
+                element.click();
+            },
+            createWindow: function () {
+                var iframe = document.createElement('iframe');
+
+                document.body.appendChild(iframe);
+
+                return iframe.contentWindow;
+            },
+            destroyWindow: function (window) {
+                window.frameElement.parentNode.removeChild(window.frameElement);
+            },
+            selectOption: function (optionElement) {
+                optionElement.parentNode.value = optionElement.value;
+            }
+        };
     });
 
     require([

@@ -33,6 +33,22 @@ define([
             return eventEmitter;
         },
 
+        forward: function (sourceEventName) {
+            var eventEmitter = this;
+
+            return {
+                to: function (object) {
+                    return {
+                        as: function (destEventName) {
+                            eventEmitter.on(sourceEventName, function () {
+                                object.emit.apply(object, [destEventName].concat([].slice.call(arguments, 1)));
+                            });
+                        }
+                    };
+                }
+            };
+        },
+
         off: function (eventName, filter, callback) {
             var eventEmitter = this,
                 listeners = eventEmitter.listeners[eventName];
