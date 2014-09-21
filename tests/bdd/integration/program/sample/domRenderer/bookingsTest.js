@@ -157,7 +157,9 @@ EOS
                 util.each(scenario.expectedResults, function (expectedResult, description) {
                     if (expectedResult.widget) {
                         it(description, function () {
-                            expect(program.getWidgetByID(expectedResult.widget).getTextContent()).to.equal(expectedResult.expectedTextContent);
+                            var widgetNode = domRenderer.getWidgetNode(program.getWidgetByID(expectedResult.widget));
+
+                            expect(widgetNode.value).to.equal(expectedResult.expectedTextContent);
                         });
                     }
                 });
