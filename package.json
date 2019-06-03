@@ -11,7 +11,7 @@
     "config": {
         "publishtest": false
     },
-    "homepage": "http://compositor.io/",
+    "homepage": "https://github.com/asmblah/compositor",
     "author": "Daniel Phillimore <dan@ovms.co> (http://ovms.co)",
     "repository": {
         "type": "git",
