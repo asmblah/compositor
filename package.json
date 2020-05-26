@@ -27,7 +27,7 @@
         "webtest": "node tests/bdd/webtest.js"
     },
     "dependencies": {
-        "express": "3.2.x",
+        "express": "4.17.x",
         "jsdom": "0.6.x",
         "modular-amd": "0.1.x",
         "node-getopt": "0.2.x"
